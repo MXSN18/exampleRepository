@@ -1,7 +1,7 @@
 from scipy import *
 import sys
 #import pybrain
-sys.path.append('C:/Users/max/OneDrive - Universität Potsdam/Master/WS24_25/AIBAS/VSCode/AIBAS_exercise_WorkingDirectory/pybrain')
+sys.path.append('tmp/AIBAS_exercise_WorkingDirectory/pybrain')
 print(sys.path)
 #import modules
 import pandas as pd
