@@ -1,8 +1,13 @@
+import requests
+import pandas as pd
+import csv
+from bs4 import BeautifulSoup
+
 # Import necessary modules
 import sys
 # Step 1: Add PyBrain to the system path
 sys.path.append('/tmp/AIBAS_exercise_WorkingDirectory/pybrain')
-import pandas as pd
+
 import numpy as np
 import matplotlib.pyplot as plt
 import pickle
@@ -16,11 +21,52 @@ from pybrain.supervised.trainers import BackpropTrainer
 from pybrain.datasets import SupervisedDataSet
 from pybrain.tools.shortcuts import buildNetwork
 
+import statsmodels.api as sm
+import scipy.stats as stats
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import MinMaxScaler
 
+
+# set the path for the data scraping
+URL = "https://github.com/MarcusGrum/AIBAS/blob/main/README.md"
+data = requests.get(URL).text
+
+# Creating BeautifulSoup Object
+soup = BeautifulSoup(data, 'html.parser')
+
+# Defines the table
+tables = soup.find_all('table')
+
+# Scrape data from the website by iterating over the column and rows
+'''for table in tables:
+    rows = table.find_all('tr') # table row
+    for row in rows:
+        cols = row.find_all('td') # table data/cell
+        cols = [ele.text.strip() for ele in cols]
+        print(cols)'''
+
+for table in tables:
+    headers = [header.text.strip() for header in table.find_all('th')] # table head
+    for row in table.find_all('tr'): # table row
+        cells = [cell.text.strip() for cell in row.find_all('td')] # table data/cell
+        if cells:
+            data = dict(zip(headers, cells))
+            print(data)
+
+with open('dataset5.csv', 'w', newline='') as file:
+    writer = csv.writer(file)
+    writer.writerow(headers)  # write headers
+    for table in tables:
+        for row in table.find_all('tr'):
+            cells = [cell.text.strip() for cell in row.find_all('td')]
+            if cells:
+                writer.writerow(cells)
 
 # Step 2: Load the dataset
-data_path = '/tmp/exampleRepository/dataset03.csv'  # Path to the uploaded file
+data_path = '/tmp/exampleRepository/dataset5.csv'  # Path to the uploaded file
 data = pd.read_csv(data_path)
+
+data = data.iloc[:10000]
 
 # Define input and output columns
 input_columns = data.columns[:-1]  # All columns except the last are inputs
@@ -47,7 +93,7 @@ for epoch in range(100):  # Train for 100 epochs
     trainer.train()
 
 # Save the trained model
-model_path = '/tmp/exampleRepository/UE_05_App3_ANN_Model.pdf'
+model_path = '/tmp/exampleRepository/UE_06_App3_ANN_Model.pdf'
 with open(model_path, 'wb') as f:
     pickle.dump(net, f)
 print(f"Trained ANN model saved to: {model_path}")
@@ -104,8 +150,4 @@ plt.legend()
 plt.grid(True)
 
 # Show plot
-plt.savefig('UE_04_App4_ScatterVisualization.pdf')
-
-
-
-
+plt.savefig('UE_04_App5_ScatterVisualization.pdf')

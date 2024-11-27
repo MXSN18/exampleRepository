@@ -76,5 +76,5 @@ for i in range(10):
     print(f"Test-Error: {test_error[-1]}")
     print("-----------------------------------")
 
-#loaded_model = NetworkReader.readFrom(r"")
+
 
