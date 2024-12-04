@@ -10,7 +10,7 @@ from sklearn.preprocessing import MinMaxScaler
 
 # Step 1: Load data
 
-path = 'c:/Users/max/OneDrive - Universität Potsdam/Master/WS24_25/AIBAS/VSCode/exampleRepository/dataset02.csv'
+path = '/tmp/exampleRepository/dataset02.csv'
 data = pd.read_csv(path)
 
 # Step 2: Data Cleaning
@@ -27,7 +27,7 @@ data = data.dropna()
 data.reset_index(drop=True, inplace=True)
 print(data.tail(10))
 
-#data = data.iloc[:200]
+data = data.iloc[:200]
 
 # Step : Quantile Filter
 
